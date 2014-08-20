@@ -73,7 +73,17 @@
 
 
 - (IBAction)clickSend:(id)sender {
-    [_socket emit:@"chatmessage", textField.text, nil];
+    
+    if([textField.text characterAtIndex:0] == '@')
+    {
+        NSString *command =[textField.text substringFromIndex:1];
+        NSArray *commands = [command componentsSeparatedByString:@" "];
+        [_socket emit:commands[0], commands.count > 1? commands[1]:@"", nil];
+    }
+    else
+    {
+        [_socket emit:@"chatmessage", textField.text, nil];
+    }
     textField.text = @"";
     [textField resignFirstResponder];
 }
