@@ -23,7 +23,14 @@
     <script>
       var socket = io();
       $('form').submit(function(){
-        socket.emit('chatmessage', $('#m').val());
+        var command = $('#m').val();
+        if(command.charAt(0) == '@')
+        {
+          var commands = command.substring(1).split(' ');
+          socket.emit(commands[0], commands[1]);
+        }
+        else
+          socket.emit('chatmessage', command);
         $('#m').val('');
         return false;
       });
